@@ -30,10 +30,37 @@ class Handlers(BaseHTTPRequestHandler):
 
         return content.encode("utf8")
 
+    def _not_found_html(self) -> bytes:
+        content = f"""
+                                        <html>
+                                              <head>
+                                                    <meta charset='utf-8'>
+                                                    <title>
+                                                            Простой HTTP-сервер
+                                                    </title>
+                                              </head>
+                                              <body>
+                                                    <h1>
+                                                        404 Not Found!
+                                                    </h1>
+                                              </body>
+                                        </html>
+                                    """
+
+        return content.encode("utf8")
+
+    def _not_found(self):
+        self.send_response(HTTPStatus.NOT_FOUND)
+        self._headers(("Content-typ", "text/html"))
+        self.wfile.write(self._not_found_html())
+
     def do_GET(self):
-        self._headers(("Content-type", "text/html"))
-        message = "Hello, World!"
-        self.wfile.write(self._get_html(message))
+        if self.path == "/":
+            self._headers(("Content-type", "text/html"))
+            message = "Hello, World!"
+            self.wfile.write(self._get_html(message))
+        else:
+            self._not_found()
 
 
 def run_server(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
