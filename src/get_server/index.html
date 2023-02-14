@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>
+        Простой HTTP-сервер
+    </title>
+
+</head>
+<body>
+<h1>
+    404 Not Found!
+</h1>
+<h2></h2>
+</body>
+<script>
+    console.log(1);
+
+    fetch('/say', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            name: 'John',
+            surname: 'Smith'
+        })
+    }).then(res => res.json())
+        .then(res => {
+            console.log(res);
+            document.querySelector('h2').innerHTML = res.POST
+        })
+        .catch(err => {
+        console.log(err);
+    });
+</script>
+</html>
